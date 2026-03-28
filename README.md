@@ -1,52 +1,85 @@
-# myTimerTask
+# myTimerTask - 系统托盘任务定时器
 
-A cross-platform system tray application written in Python for task reminders and memory monitoring.
+**[English](README_EN.md)** | **中文**
 
-## Features
+一个跨平台的系统托盘小程序，用于 **任务定时提醒**、**任务记录** 和 **内存占用监控**。使用 Python 编写，支持 Windows、Linux 和 macOS。
 
-- **System tray icon**: Displays memory percentage with large, clear text
-  - Green (< 80%), Orange (80–90%), Red (> 90%)
-- **Floating widget**: Always-on-top, 70% transparent square at the bottom-left of the screen, shows memory %
-- **10-minute task panel** (left-click the floating widget):
-  - 5 single-line task entries
-  - Countdown timer resets on every task edit
-  - Auto-pops up after 10 minutes with a white/green flash
-- **Hourly task panel** (right-click the floating widget):
-  - 20 task entries (initially shows 5, scroll to see more)
-  - Countdown strictly to the next whole hour
-  - Auto-pops up at every hour mark with a white/green flash
-- **Task completion**: Click ✓ to complete a task; it is removed, remaining tasks shift up, and the entry is logged to `10分钟任务日志.md`
-- **Auto-close**: Task panels close automatically after 15 seconds of inactivity
-- **High memory process killer**: When memory exceeds 94%, kills processes in order: `chrome → edge → java → vscode (code)`, waiting 5 s between each kill
+## ✨ 功能特性
 
-## Requirements
+### 📊 内存监控
+- **托盘图标**：系统托盘大字体显示内存占用百分比
+  - 🟢 绿色：< 80%
+  - 🟠 橙色：80% ~ 90%
+  - 🔴 红色：> 90%
+- **悬浮窗口**：屏幕左下角始终置顶的半透明（70%透明度）小方块，实时显示内存百分比，颜色分级同上
+- **高内存自动杀进程**：当内存超过 94% 时，按以下优先级自动终止进程：
+  `Chrome → Edge → Java → VSCode (code)`
+  每杀一个进程后等待 5 秒，若内存仍超过 90% 则继续杀下一个
+
+### ⏱ 10分钟任务（左键点击悬浮图标）
+- 弹出任务面板，含 5 条单行文本输入框
+- 每条宽度约 20 个汉字
+- 标题显示 `当前10分钟任务:[yyyy:MM:dd hh:mm.ss]`
+- 文本修改后自动重启 10 分钟倒计时
+- 倒计时结束后自动弹出面板并白绿交替闪烁 5 次
+
+### ⏰ 小时任务（右键点击悬浮图标）
+- 弹出任务面板，含 20 条任务（初始显示 5 条，可滚动查看）
+- 标题显示 `当前小时任务:[yyyy:MM:dd hh:mm.ss]`
+- 严格按系统时间的下一个整点倒计时
+- 每个整点自动弹出面板并白绿交替闪烁 5 次
+
+### ✅ 任务管理
+- 每条任务右边有 ✓ 按钮，点击标记为完成
+- 完成的任务自动从列表中删除，其余任务上移，末行补空
+- 完成记录自动写入 `10分钟任务日志.md`，格式：`yyyy:MM:dd hh:mm.ss Finish Task: 任务内容`
+
+### 🔒 自动关闭
+- 弹窗 15 秒无任何操作（增删改）自动关闭
+
+## 📋 系统要求
 
 - Python 3.10+
-- Works on **Windows**, **Linux**, and **macOS**
+- 支持 **Windows**、**Linux**、**macOS**
 
-## Installation
+## 🚀 安装与运行
+
+### 安装依赖
 
 ```bash
 pip install -r requirements.txt
 ```
 
-> **Linux note**: The system tray icon requires `libappindicator3` or a compatible indicator service. If the tray icon is unavailable, the floating widget still works.
+> **Linux 提示**：系统托盘图标需要 `libappindicator3` 或兼容的指示器服务。如果托盘不可用，悬浮窗口仍可正常工作。
 
-## Usage
+### 启动程序
 
 ```bash
 python3 systray_task.py
 ```
 
-## Files generated at runtime
+## 📁 运行时生成的文件
 
-| File | Description |
-|------|-------------|
-| `tasks.json` | Persists task list contents between sessions |
-| `10分钟任务日志.md` | Log of all completed tasks with timestamps |
+| 文件 | 说明 |
+|------|------|
+| `tasks.json` | 任务列表的持久化存储（跨会话保留） |
+| `10分钟任务日志.md` | 已完成任务的时间戳日志 |
 
-## Log format
+## 📝 日志格式示例
 
 ```
-2024:03:28 14:30.00 Finish Task: Write design document
+2024:03:28 14:30.00 Finish Task: 编写设计文档
 ```
+
+## 🛠 技术栈
+
+| 组件 | 技术 |
+|------|------|
+| 语言 | Python 3.10+ |
+| GUI | tkinter（标准库） |
+| 系统托盘 | pystray + Pillow |
+| 系统信息 | psutil |
+
+## 📄 许可证
+
+本项目基于 [MIT License](LICENSE) 开源。
