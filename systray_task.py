@@ -798,7 +798,7 @@ class App:
         """每秒检查一次是否到达整点。
         使用小时数去重，避免在同一秒内重复触发或因检测延迟而错过触发。"""
         now = datetime.datetime.now()
-        # 当前分钟为0且秒数在0-2之间视为整点（容忍2秒延迟）
+        # 当前分钟为0且秒数在0-2之间视为整点（容忍3秒窗口，覆盖0/1/2秒）
         if now.minute == 0 and now.second <= 2:
             current_hour = now.hour
             if current_hour != self._last_hourly_fire_hour:
